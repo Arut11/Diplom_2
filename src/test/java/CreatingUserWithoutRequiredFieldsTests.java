@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import user.User;
 import user.UserClient;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -20,6 +21,8 @@ public class CreatingUserWithoutRequiredFieldsTests {
     private User user;
     private int createStatusCode;
     private ValidatableResponse createResponse;
+    private String token;
+    private boolean success;
 
     @Before
     public void setUp() {
@@ -29,7 +32,10 @@ public class CreatingUserWithoutRequiredFieldsTests {
 
     @After
     public void cleanUp() {
-
+        token = createResponse.extract().path("accessToken");
+        if(success) {
+            userClient.deleteUser(token);
+        }
 
     }
 
@@ -57,11 +63,12 @@ public class CreatingUserWithoutRequiredFieldsTests {
     @DisplayName("Проверка создания пользователя без одного из обязательных полей")
     public void CreatingUserWithoutRequiredFieldsTest() {
         createResponse = userClient.createUser(user);
+        token = createResponse.extract().path("accessToken");
         createStatusCode = createResponse.extract().statusCode();
-        boolean message = createResponse.extract().path("success");
+        success = createResponse.extract().path("success");
         assertEquals("Статус код вернулся не 403 при создании пользователя без одного из обязательных полей",
                 HttpStatus.SC_FORBIDDEN, createStatusCode);
-        assertFalse("В теле ответа в поле success вернулось значение true", message);
+        assertFalse("В теле ответа в поле success вернулось значение true", success);
 
     }
 

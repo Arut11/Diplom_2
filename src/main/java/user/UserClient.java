@@ -55,10 +55,10 @@ public class UserClient {
     }
 
     @Step("Удаление пользователя")
-    public void deleteUser(String accessToken, User user) {
+    public void deleteUser(String accessToken) {
         given()
-                .header("Authorization", accessToken)
-                .body(user)
+                .header("authorization", accessToken)
+                .spec(getBaseSpec())
                 .when()
                 .delete(USER_PATH)
                 .then();

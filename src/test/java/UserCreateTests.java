@@ -7,7 +7,6 @@ import org.junit.Test;
 import user.User;
 import user.UserClient;
 import user.UserGenerator;
-
 import static org.junit.Assert.*;
 
 
@@ -16,6 +15,8 @@ public class UserCreateTests {
     private UserClient userClient;
     private User user;
     private boolean success;
+    private String token;
+    private ValidatableResponse createResponse;
 
     @Before
     public void setUp() {
@@ -26,15 +27,19 @@ public class UserCreateTests {
 
     @After
     public void cleanUp() {
+        token = createResponse.extract().path("accessToken");
+        if(success) {
+            userClient.deleteUser(token);
+        }
 
     }
 
     @Test
     @DisplayName("Проверка создания уникального пользователя")
     public void userCreatedTest() {
-        ValidatableResponse createResponse = userClient.createUser(user);
-        boolean created = createResponse.extract().path("success");
-        assertTrue("В теле ответа в поле success вернулось значение false", created);
+        createResponse = userClient.createUser(user);
+        success = createResponse.extract().path("success");
+        assertTrue("В теле ответа в поле success вернулось значение false", success);
 
     }
 
@@ -42,9 +47,9 @@ public class UserCreateTests {
     @DisplayName("Проверка создания пользователя, который уже зарегистрирован")
     public void userDoubleCreatedTest() {
         userClient.createUser(user);
-        ValidatableResponse createSecondResponse = userClient.createUser(user);
-        boolean created = createSecondResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", created);
+        createResponse = userClient.createUser(user);
+        success = createResponse.extract().path("success");
+        assertFalse("В теле ответа в поле success вернулось значение true", success);
 
     }
 

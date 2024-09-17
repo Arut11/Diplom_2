@@ -30,7 +30,10 @@ public class EditUserTest {
     }
 
     @After
-    public void tearDown() {
+    public void cleanUp() {
+        if(success) {
+            userClient.deleteUser(token);
+        }
 
     }
 

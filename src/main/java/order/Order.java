@@ -12,4 +12,10 @@ public class Order {
 
     private ArrayList<String> ingredients;
 
+    public void addIngredient(String ingredient) {
+        if (this.ingredients == null) {
+            this.ingredients = new ArrayList<>();
+        }
+        this.ingredients.add(ingredient);
+    }
 }

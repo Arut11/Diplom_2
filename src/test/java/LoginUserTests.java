@@ -17,8 +17,8 @@ public class LoginUserTests {
     private User user;
     private int createStatusCode;
     private ValidatableResponse createResponse;
-    private int userId;
     private boolean success;
+    private String token;
 
 
     @Before
@@ -27,11 +27,15 @@ public class LoginUserTests {
         user = UserGenerator.getUser();
         createResponse = userClient.createUser(user);
         createStatusCode = createResponse.extract().statusCode();
+        token = createResponse.extract().path("accessToken");
 
     }
 
     @After
     public void cleanUp() {
+        if(success) {
+            userClient.deleteUser(token);
+        }
 
     }
 
