@@ -1,18 +1,18 @@
-import io.qameta.allure.junit4.DisplayName;
+
 import io.restassured.response.ValidatableResponse;
 import order.Order;
 import order.OrderClient;
 import order.OrderGenerator;
 import org.apache.http.HttpStatus;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import user.User;
 import user.UserClient;
 import user.UserGenerator;
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderCreateTests {
 
@@ -27,7 +27,7 @@ public class OrderCreateTests {
     private String token;
     private int statusCode;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         userClient = new UserClient();
         orderClient = new OrderClient();
@@ -37,7 +37,7 @@ public class OrderCreateTests {
 
     }
 
-    @After
+    @AfterEach
     public void cleanUp() {
         if(success) {
             userClient.deleteUser(token);
@@ -54,9 +54,12 @@ public class OrderCreateTests {
         name = createResponse.extract().path("name");
         orderNumber = createResponse.extract().path("order.number");
         success = createResponse.extract().path("success");
-        assertNotNull("Поле name пустое", name);
-        assertNotNull("Поле order пустое", orderNumber);
-        assertTrue("В теле ответа в поле success вернулось значение false", success);
+        assertNotNull(name,
+                "Поле name пустое");
+        assertNotNull(orderNumber,
+                "Поле order пустое");
+        assertTrue(success,
+                "В теле ответа в поле success вернулось значение false");
 
     }
 
@@ -69,9 +72,12 @@ public class OrderCreateTests {
         name = createResponse.extract().path("name");
         orderNumber = createResponse.extract().path("order.number");
         success = createResponse.extract().path("success");
-        assertNotNull("Поле name пустое", name);
-        assertNotNull("Поле order пустое", orderNumber);
-        assertTrue("В теле ответа в поле success вернулось значение false", success);
+        assertNotNull(name,
+                "Поле name пустое");
+        assertNotNull(orderNumber,
+                "Поле order пустое");
+        assertTrue(success,
+                "В теле ответа в поле success вернулось значение false");
 
     }
 
@@ -82,7 +88,8 @@ public class OrderCreateTests {
         message = createResponse.extract().path("message");
         success = createResponse.extract().path("success");
         assertEquals("Поле message пустое", "Ingredient ids must be provided", message);
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 
@@ -93,8 +100,8 @@ public class OrderCreateTests {
         order.addIngredient("1");
         createResponse = orderClient.createOrders(token, order);
         statusCode = createResponse.extract().statusCode();
-        assertEquals("Статус код вернулся не 500",
-                HttpStatus.SC_INTERNAL_SERVER_ERROR, statusCode);
+        assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, statusCode,
+                "Статус код вернулся не 500");
 
     }
 
