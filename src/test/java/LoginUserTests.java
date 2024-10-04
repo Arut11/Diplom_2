@@ -1,15 +1,16 @@
-import io.qameta.allure.junit4.DisplayName;
+
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import user.User;
 import user.UserClient;
 import user.UserCredentials;
 import user.UserGenerator;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginUserTests {
 
@@ -21,7 +22,7 @@ public class LoginUserTests {
     private String token;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         userClient = new UserClient();
         user = UserGenerator.getUser();
@@ -31,7 +32,7 @@ public class LoginUserTests {
 
     }
 
-    @After
+    @AfterEach
     public void cleanUp() {
         if(success) {
             userClient.deleteUser(token);
@@ -44,10 +45,11 @@ public class LoginUserTests {
     public void LoginUserTest() {
         ValidatableResponse loginResponse = userClient.login(UserCredentials.from(user));
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя не 200",
-                HttpStatus.SC_OK, loginStatusCode);
+        assertEquals(HttpStatus.SC_OK, loginStatusCode,
+                "Статус код при авторизации пользователя не 200");
         success = loginResponse.extract().path("success");
-        assertTrue("В теле ответа в поле success вернулось значение false", success);
+        assertTrue(success,
+                "В теле ответа в поле success вернулось значение false");
 
     }
 
@@ -57,10 +59,11 @@ public class LoginUserTests {
         UserCredentials userCredentials = new UserCredentials(user.getEmail(), null);
         ValidatableResponse loginResponse = userClient.login(userCredentials);
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя без пароля не 401",
-                HttpStatus.SC_UNAUTHORIZED, loginStatusCode);
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, loginStatusCode,
+                "Статус код при авторизации пользователя без пароля не 401");
         success = loginResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 
@@ -70,10 +73,11 @@ public class LoginUserTests {
         UserCredentials userCredentials = new UserCredentials(null, user.getPassword());
         ValidatableResponse loginResponse = userClient.login(userCredentials);
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя без пароля не 401",
-                HttpStatus.SC_UNAUTHORIZED, loginStatusCode);
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, loginStatusCode,
+                "Статус код при авторизации пользователя без пароля не 401");
         success = loginResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 
@@ -83,10 +87,11 @@ public class LoginUserTests {
         UserCredentials userCredentials = new UserCredentials(null, null);
         ValidatableResponse loginResponse = userClient.login(userCredentials);
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя без пароля не 401",
-                HttpStatus.SC_UNAUTHORIZED, loginStatusCode);
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, loginStatusCode,
+                "Статус код при авторизации пользователя без пароля не 401");
         success = loginResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 
@@ -96,10 +101,11 @@ public class LoginUserTests {
         UserCredentials userCredentials = new UserCredentials(RandomStringUtils.randomAlphanumeric(7), user.getPassword());
         ValidatableResponse loginResponse = userClient.login(userCredentials);
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя без пароля не 401",
-                HttpStatus.SC_UNAUTHORIZED, loginStatusCode);
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, loginStatusCode,
+                "Статус код при авторизации пользователя без пароля не 401");
         success = loginResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 
@@ -109,10 +115,11 @@ public class LoginUserTests {
         UserCredentials userCredentials = new UserCredentials(user.getEmail(), RandomStringUtils.randomAlphanumeric(7));
         ValidatableResponse loginResponse = userClient.login(userCredentials);
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя без пароля не 401",
-                HttpStatus.SC_UNAUTHORIZED, loginStatusCode);
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, loginStatusCode,
+                "Статус код при авторизации пользователя без пароля не 401");
         success = loginResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 
@@ -122,10 +129,11 @@ public class LoginUserTests {
         UserCredentials userCredentials = new UserCredentials(RandomStringUtils.randomAlphanumeric(7), RandomStringUtils.randomAlphanumeric(7));
         ValidatableResponse loginResponse = userClient.login(userCredentials);
         int loginStatusCode = loginResponse.extract().statusCode();
-        assertEquals("Статус код при авторизации пользователя без пароля не 401",
-                HttpStatus.SC_UNAUTHORIZED, loginStatusCode);
+        assertEquals(HttpStatus.SC_UNAUTHORIZED, loginStatusCode,
+                "Статус код при авторизации пользователя без пароля не 401");
         success = loginResponse.extract().path("success");
-        assertFalse("В теле ответа в поле success вернулось значение true", success);
+        assertFalse(success,
+                "В теле ответа в поле success вернулось значение true");
 
     }
 

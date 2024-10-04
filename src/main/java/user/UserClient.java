@@ -2,7 +2,6 @@ package user;
 
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
-
 import static io.restassured.RestAssured.given;
 import static restClient.RestClient.getBaseSpec;
 
